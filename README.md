@@ -3,7 +3,7 @@ mqtt-cordova
 
 # MqTT Plugin for Cordova
 
-This is a plugin for MqTT protocol of messaging. Currently Android is supported. Forthcoming support for Windows Phone.
+This is a plugin for MqTT protocol of messaging. Currently Android is supported. Forthcoming support for Windows Phone. More features are stil being developed.
 
 ## Features
 
