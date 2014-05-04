@@ -26,6 +26,6 @@
         </config-file>
         <source-file src="src/android/MqTTPlugin.java" target-dir="src/com/arcoirislabs/plugin/mqtt" />
         <source-file src="src/android/Mqtt.java" target-dir="src/com/arcoirislabs/mqttcont" />
-        <source-file src="src/android/mqtt-client.jar" target-dir="libs/" />
+        <!--<source-file src="src/android/mqtt-client.jar" target-dir="libs/" />-->
     </platform>
 </plugin>
