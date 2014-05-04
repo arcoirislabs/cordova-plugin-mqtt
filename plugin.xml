@@ -5,7 +5,7 @@
       version="0.1.0">
     <name>MqTT</name>
     <description>Cordova MqTT Plugin from Arcoiris Labs</description>
-    <license>Apache 2.0 License</license>
+    <license>Apache 2.0</license>
     <keywords>cordova,phonegap,secure,mqtt</keywords>
     <engines>
       <engine name="cordova" version=">=3.0.0" />
