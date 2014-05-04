@@ -5,7 +5,7 @@
       version="0.1.0">
     <name>MqTT</name>
     <description>Cordova MqTT Plugin from Arcoiris Labs</description>
-    <license>ALL</license>
+    <license>Apache 2.0 License</license>
     <keywords>cordova,phonegap,secure,mqtt</keywords>
     <engines>
       <engine name="cordova" version=">=3.0.0" />
@@ -16,7 +16,7 @@
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="MqTT">
+            <feature name="MqTTPlugin">
                 <param name="android-package" value="com.arcoirislabs.plugin.mqtt.MqTTPlugin"/>
             </feature>
         </config-file>
@@ -25,5 +25,7 @@
             <uses-permission android:name="android.permission.INTERNET" />
         </config-file>
         <source-file src="src/android/MqTTPlugin.java" target-dir="src/com/arcoirislabs/plugin/mqtt" />
+        <source-file src="src/android/Mqtt.java" target-dir="src/com/arcoirislabs/mqttcont" />
+        <source-file src="src/android/mqtt-client.jar" target-dir="libs/" />
     </platform>
 </plugin>
