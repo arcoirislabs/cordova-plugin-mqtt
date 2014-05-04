@@ -55,4 +55,7 @@ mqtt.subscribe({
 ```
 
 Created and maintained by Arcoiris Labs
+
 Have fun!
+
+Released under Apache 2.0 Licence
