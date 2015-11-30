@@ -17,8 +17,8 @@ Install plugins via plugin repository or GitHub
 $ cordova plugin add com.arcoirislabs.plugin.mqtt
 ```
 
-```javascript
-$ $ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
+```sh
+$ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
 ```
 
 ### Documentation
@@ -33,7 +33,7 @@ Default listeners you can program anywhere for following events
 For example you can configure the event in this way
 
  ```javascript
- document.addEventListener(<event name>,function(e){
+ document.addEventListener("connected",function(e){
   console.log(e.type)
  },false)
 ```
@@ -46,7 +46,8 @@ To connect to a broker
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.connect({
   port:1883,
-  url:"mqtt://test.mosquitto.org"})
+  url:"mqtt://test.mosquitto.org"
+})
 ```
 
 To subscribe to a channel. You can use this function.
