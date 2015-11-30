@@ -58,12 +58,11 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
 
     private void connect(String url,int port,String cid,int keepalive, final CallbackContext callbackContext) {
         if (url != null && url.length() > 0) {
-            Log.i("mqttalabs", url);
-            Log.i("mqttalabs", String.valueOf(port));
+            
             mqtt = new MQTT();
             connectionCb = callbackContext;
             try {
-                mqtt.setHost("tcp://test.mosquitto.org:1883");
+                mqtt.setHost(url,port);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
