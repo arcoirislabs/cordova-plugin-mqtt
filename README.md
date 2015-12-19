@@ -29,11 +29,11 @@ $ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
 ### Documentation
 
 ##### Methods
-1. connect
-2. publish
-3. subscribe
-4. unsubscribe
-5. disconnect
+1. [connect](#connect)
+2. ###### publish
+3. ###### subscribe
+4. ###### unsubscribe
+5. ###### disconnect
 
 ##### Events
 Default listeners you can program anywhere for following events
