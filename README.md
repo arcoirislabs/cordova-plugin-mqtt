@@ -28,7 +28,6 @@ $ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
 
 ### Documentation
 
-<<<<<<< HEAD
 ##### Methods
 1. ###### connect
 2. ###### publish
@@ -37,19 +36,14 @@ $ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
 5. ###### disconnect
 
 ##### Events
-=======
->>>>>>> origin/master
 Default listeners you can program anywhere for following events
  - connected
  - disconnected
  - failure (connection)
  - subscribed
  - not subscribed
-<<<<<<< HEAD
  - published
  - not published
-=======
->>>>>>> origin/master
 
 For example you can configure the event in this way
 
@@ -59,20 +53,13 @@ For example you can configure the event in this way
  },false)
 ```
 
-<<<<<<< HEAD
 
 ##### connect
-=======
-There are following methods currently planned
- - publish
-
->>>>>>> origin/master
 To connect to a broker
 
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.connect({
   port:1883,
-<<<<<<< HEAD
   url:"mqtt://test.mosquitto.org",
   success:function(s){
 
@@ -101,17 +88,10 @@ cordova.plugins.CordovaMqTTPlugin.publish({
 In order to debug the ublish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback.
 
 ##### subscribe
-=======
-  url:"mqtt://test.mosquitto.org"
-})
-```
-
->>>>>>> origin/master
 To subscribe to a channel. You can use this function.
 
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.subscribe({
-<<<<<<< HEAD
    topic:"sampletopic",
   success:function(s){
 
@@ -119,9 +99,6 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
   error:function(e){
   
   }
-=======
-   topic:"sampletopic"
->>>>>>> origin/master
 })
 ```
 
@@ -133,7 +110,6 @@ If you want to read the payload, you can listen to the event by the name of the 
  },false)
 ```
 
-<<<<<<< HEAD
 ##### unsubscribe
 
 To unsubscribe to a channel. You can use this function.
@@ -168,12 +144,6 @@ cordova.plugins.CordovaMqTTPlugin.disconnect({
 
 ### Todos
 
-=======
-
-### Todos
-
- - Add new method for publish
->>>>>>> origin/master
  - Plan support for new platforms (iOS, Windows Phone)
 
 License
