@@ -16,31 +16,85 @@ channel = require('cordova/channel'),
             ka = args.keepAlive;
         }
         exec(function(cd){
-            switch(cd){
-                case "connected":
-                    cordova.fireDocumentEvent("connected");
-                    break;
+            cordova.fireDocumentEvent("connected");
+            if(args.success!=undefined){
+                args.success("connected");
+            }
+
+        }, function(e){
+            switch(e){
                 case "disconnected":
                     cordova.fireDocumentEvent("disconnected");
+                    if(args.error!=undefined){
+                        args.error("disconnected");
+                    }
                     break;
                 case "failure":
                     cordova.fireDocumentEvent("failure");
+                    if(args.error!=undefined){
+                        args.error("failure");
+                    }
                     break;
             }
-        }, function(e){
-            console.error(e)
-        }, "CordovaMqTTPlugin", "connect", [args.url,args.port,cid,ka])
+            args.error(e)
+        }, "CordovaMqTTPlugin", "connect", [args.url+":"+args.port,cid,ka])
     }
     exports.subscribe = function(args){
         exec(function(data){
             if(data!="subscribed"){
                 var d = JSON.parse(data);
                 cordova.fireDocumentEvent(d.topic,d)
+                if(args.success!=undefined){
+                    args.success(d)
+                }
             }else{
                 cordova.fireDocumentEvent(data);
+                if(args.success!=undefined){
+                    args.success(data)
+                }
             }
         }, function(e){
-        console.error(e)}, "CordovaMqTTPlugin", "subscribe", [args.topic])
+            if(args.error!=undefined){
+                args.error(e)
+            }
+        }, "CordovaMqTTPlugin", "subscribe", [args.topic])
+    }
+    exports.publish = function(args){
+        exec(function(data){
+            cordova.fireDocumentEvent(data);
+            if(args.success!=undefined){
+                args.success(data)
+            }
+        }, function(e){
+            if(args.error!=undefined){
+                args.error(e)
+            }
+        }, "CordovaMqTTPlugin", "publish", [args.topic,args.payload])
+    }
+    exports.unsubscribe = function(args){
+        exec(function(data){
+            cordova.fireDocumentEvent(data);
+            document.removeEventListener(args.topic)
+            if(args.success!=undefined){
+                args.success(data)
+            }
+        }, function(e){
+            if(args.error!=undefined){
+                args.error(e)
+            }
+        }, "CordovaMqTTPlugin", "unsubscribe", [args.topic])
+    }
+    exports.disconnect = function(args){
+        exec(function(data){
+            cordova.fireDocumentEvent(data);
+            if(args.success!=undefined){
+                args.success(data)
+            }
+        }, function(e){
+            if(args.error!=undefined){
+                args.error(e)
+            }
+        }, "CordovaMqTTPlugin", "disconnect", [args.topic])
     }
     channel.onCordovaReady.subscribe(function() {
         console.log("subscribed to a chennle");
