@@ -1,10 +1,9 @@
-cordova.define("com.arcoirislabs.plugin.mqtt.CordovaMqTTPlugin", function(require, exports, module) {
 var exec = require('cordova/exec'), cordova = require('cordova'),
 channel = require('cordova/channel'),
     utils = require('cordova/utils');
     
     exports.connect = function(args){
-        var cid,ka;
+        var cid,ka,url;
         if(!args.isCleanSession){
             cid = args.clientId;
         }else{
@@ -15,29 +14,39 @@ channel = require('cordova/channel'),
         }else{
             ka = args.keepAlive;
         }
-        exec(function(cd){
-            cordova.fireDocumentEvent("connected");
-            if(args.success!=undefined){
-                args.success("connected");
-            }
+        if (args.port!==undefined) {
+            url = args.url+":"+args.port;
+        } else{
+            url = args.url;
+        };
+        if (args.url!==undefined) {
+            exec(function(cd){
+                cordova.fireDocumentEvent("connected");
+                if(args.success!=undefined){
+                    args.success("connected");
+                }
 
-        }, function(e){
-            switch(e){
-                case "disconnected":
-                    cordova.fireDocumentEvent("disconnected");
-                    if(args.error!=undefined){
-                        args.error("disconnected");
-                    }
-                    break;
-                case "failure":
-                    cordova.fireDocumentEvent("failure");
-                    if(args.error!=undefined){
-                        args.error("failure");
-                    }
-                    break;
-            }
-            args.error(e)
-        }, "CordovaMqTTPlugin", "connect", [args.url+":"+args.port,cid,ka])
+            }, function(e){
+                switch(e){
+                    case "disconnected":
+                        cordova.fireDocumentEvent("disconnected");
+                        if(args.error!=undefined){
+                            args.error("disconnected");
+                        }
+                        break;
+                    case "failure":
+                        cordova.fireDocumentEvent("failure");
+                        if(args.error!=undefined){
+                            args.error("failure");
+                        }
+                        break;
+                }
+                args.error(e)
+            }, "CordovaMqTTPlugin", "connect", [url,cid,ka])
+        } else{
+            alert("Please provide the url and the port.")
+        };
+            
     }
     exports.subscribe = function(args){
         exec(function(data){
@@ -99,5 +108,3 @@ channel = require('cordova/channel'),
     channel.onCordovaReady.subscribe(function() {
         console.log("subscribed to a chennle");
     });
-
-});
