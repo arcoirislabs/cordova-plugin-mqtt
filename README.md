@@ -25,6 +25,7 @@ $ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
 1. No support for authentication yet.
 2. Added new functions to publish, unsubscribe, disconnect. 
 3. Fixed some crash bugs.
+4. Now every function is threaded using Cordova.getThreadPool(). So no more blocking of UI due to previous implementation
 
 ### Documentation
 
