@@ -66,7 +66,10 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
             return true;
         }
         if(action.equals("subscribe")){
-            this.asyncCB = callbackContext;
+            if (asyncCB ==null){
+                this.asyncCB = callbackContext;
+            }
+
             if (connection!= null){
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -141,6 +144,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
 
                 public void onDisconnected() {
                     sendOnceUpdate("disconnected");
+                    connection = null;
                 }
 
                 public void onConnected() {
@@ -165,8 +169,10 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                 }
 
                 public void onFailure(Throwable value) {
+                    connection = null;
                     Log.d("mqttalabs", "connection failure: " + value.toString());
-                    sendUpdate("failure");
+                    sendOnceUpdate("failure");
+
                 }
             });
             //callbackContext.success("connecting");

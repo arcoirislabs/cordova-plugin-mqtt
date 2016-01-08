@@ -7,7 +7,7 @@ mqtt-cordova is plugin for building MQTT client for multiple platforms in Apache
 4.x (Cordova Android)
 
 ### Version
-0.1.0
+0.2.0
 
 ### Installation
 
@@ -23,9 +23,9 @@ $ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
 
 ### Changelog
 1. No support for authentication yet.
-2. Added new functions to publish, unsubscribe, disconnect. 
-3. Fixed some crash bugs.
-4. Now every function is threaded using Cordova.getThreadPool(). So no more blocking of UI due to previous implementation
+2. Added a better control over multiple subscriptions along with other methods' execution.
+3. Fixed multiple subscriptions issue. Now you can subscribe to multiple topics (the topic parameter doesn't accepts an array. Still needs a string. So subscribe to the events separately).
+4. Now every function is threaded. So no more blocking of UI due to previous implementation
 
 ### Documentation
 
@@ -86,7 +86,7 @@ cordova.plugins.CordovaMqTTPlugin.publish({
   }
 })
 ```
-In order to debug the ublish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback.
+In order to debug the ublish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback. The success callback can notify you once you are successfully subscribed, so it will be called only once. To access the topic and payload objects, you need to use the onPublish method.
 
 ##### subscribe
 To subscribe to a channel. You can use this function.
@@ -99,6 +99,9 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
   },
   error:function(e){
   
+  },
+  onPublish:function(topic,payload){
+
   }
 })
 ```

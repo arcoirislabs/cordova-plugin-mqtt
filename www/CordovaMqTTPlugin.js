@@ -1,4 +1,3 @@
-
 var exec = require('cordova/exec'), cordova = require('cordova'),
 channel = require('cordova/channel'),
     utils = require('cordova/utils');
@@ -49,10 +48,13 @@ channel = require('cordova/channel'),
                         }
                     }else{
                         cordova.fireDocumentEvent(data);
+                        args.success(data)
                     }
-                    args.success(data)
+
         }, function(e){
-        console.error(e)}, "CordovaMqTTPlugin", "subscribe", [args.topic]);
+            console.error(e)
+            args.error(e);
+        }, "CordovaMqTTPlugin", "subscribe", [args.topic]);
          
     }
     exports.publish = function(args){
@@ -92,3 +94,4 @@ channel = require('cordova/channel'),
                 }
             }, "CordovaMqTTPlugin", "disconnect", [args.topic])
         }
+    
