@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-mqtt",
+  "version": "0.2.0",
+  "description": "Cordova plugin for MQTT (Message Queuing Telemetry Transport) protocol. Supports 3.x protocol. More platforms to be added in coming future.",
+  "cordova": {
+    "id": "cordova-plugin-mqtt",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcoirislabs/mqtt-cordova.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arcoirislabs/mqtt-cordova/issues"
+  },
+  "keywords": [
+    "cordova",
+    "ecosystem:cordova",
+    "mqtt",
+    "arcoirislabs"
+  ],
+  "author": {
+    "name": "Arcoiris Labs",
+    "email": "amey@arcoirislabs.com"
+  },
+  "license": "MIT"
+}

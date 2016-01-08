@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="com.arcoirislabs.plugin.mqtt" version="0.2.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-mqtt" version="0.2.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>CordovaMqTTPlugin</name>
     <description>The new MqTT plugin for Cordova</description>
     <js-module name="CordovaMqTTPlugin" src="www/CordovaMqTTPlugin.js">
