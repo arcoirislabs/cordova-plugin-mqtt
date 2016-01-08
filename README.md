@@ -86,7 +86,7 @@ cordova.plugins.CordovaMqTTPlugin.publish({
   }
 })
 ```
-In order to debug the publish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback. The success callback can notify you once you are successfully subscribed, so it will be called only once. To access the topic and payload objects, you need to use the onPublish method.
+In order to debug the publish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback. 
 
 ##### subscribe
 To subscribe to a channel. You can use this function.
@@ -105,7 +105,7 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
   }
 })
 ```
-
+The success callback can notify you once you are successfully subscribed, so it will be called only once. To access the topic and payload objects, you need to use the onPublish method.
 If you want to read the payload, you can listen to the event by the name of the topic. For example if you have subscribed to the topic called "sampletopic". You can read the payload in this way.
 
 ```javascript
