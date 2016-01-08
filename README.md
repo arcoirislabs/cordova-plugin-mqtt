@@ -18,7 +18,7 @@ $ cordova plugin add cordova-plugin-mqtt
 ```
 
 ```sh
-$ cordova plugin add https://github.com/arcoirislabs/mqtt-cordova.git
+$ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 ```
 
 ### Changelog
