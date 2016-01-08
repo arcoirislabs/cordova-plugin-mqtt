@@ -25,94 +25,89 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
 
     MQTT mqtt = null;
     CallbackConnection connection = null;
-    CallbackContext connectionCb;
+    CallbackContext syncCB,asyncCB;
+    PluginResult resok,reserr;
     @Override
-    public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, final JSONArray args, CallbackContext callbackContext) throws JSONException {
         if(action.equals("connect")){
+            this.syncCB = callbackContext;
             if (connection== null){
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            connect(args.getString(0), args.getString(1), args.getInt(2), callbackContext);
+                            connect(args.getString(0), args.getString(1), args.getInt(2));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
             }else{
-                callbackContext.success("Connection is already established.");
+                sendOnceUpdate("already connected");
             }
             return true;
         }
         if(action.equals("publish")){
+            this.syncCB = callbackContext;
             if (connection!= null){
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            publish(args, callbackContext);
+                            publish(args);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
             }else{
-                callbackContext.error("No connection is established.");
+                sendOnceUpdate("already connected");
             }
-
             return true;
         }
         if(action.equals("subscribe")){
+            this.asyncCB = callbackContext;
             if (connection!= null){
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            subscribe(args, callbackContext);
+                            subscribe(args);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
+            }
+            return true;
+        }
+        if(action.equals("disconnect")){
+            this.syncCB = callbackContext;
+            if (connection!= null){
+                cordova.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        disconnect();
+                    }
+                });
             }else{
-                callbackContext.error("No connection is established.");
+                syncCB.success("already disconnected");
             }
             return true;
         }
         if(action.equals("unsubscribe")){
+            this.syncCB = callbackContext;
             if (connection!= null){
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            unsubscribe(args, callbackContext);
+                            unsubscribe(args);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
-            }else{
-                callbackContext.error("No connection is established.");
-            }
-
-            return true;
-        }
-        if(action.equals("disconnect")){
-            if (connection!= null){
-                cordova.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            disconnect(callbackContext);
-                            connection = null;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }else{
-                callbackContext.error("No connection is established.");
             }
             return true;
         }
@@ -120,12 +115,10 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
         return false;
     }
 
-
-    private void connect(String url,String cid,int keepalive, final CallbackContext callbackContext) {
+    private void connect(String url,String cid,int keepalive) {
         if (url != null && url.length() > 0) {
-            Log.i("mqtt plugin",url);
+            Log.i("mqttalabs", url);
             mqtt = new MQTT();
-            connectionCb = callbackContext;
             try {
                 mqtt.setHost(url);
             } catch (URISyntaxException e) {
@@ -136,7 +129,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
             connection.connect(new Callback<Void>() {
                 public void onFailure(Throwable value) {
                     Log.e("mqttalabs:fail", value.toString());
-                    //sendConnectionData("failure",false);
+                    sendOnceUpdate("failure");
                 }
 
                 // Once we connect..
@@ -147,22 +140,22 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
             connection.listener(new Listener() {
 
                 public void onDisconnected() {
-                    sendConnectionData("disconnected", true);
+                    sendOnceUpdate("disconnected");
                 }
 
                 public void onConnected() {
-                    sendConnectionData("connected", true);
+                    sendOnceUpdate("connected");
                 }
 
                 public void onPublish(UTF8Buffer topic, Buffer payload, Runnable ack) {
-                    Log.d("mqttalabs", "topic: " + topic.toString());
-                    Log.d("mqttalabs", "payload: " + payload.toString());
+                    //Log.d("mqttalabs", "topic: " + topic.toString());
+                    //Log.d("mqttalabs", "payload: " + payload.toString());
 
                     JSONObject subdata = new JSONObject();
                     try {
                         subdata.put("topic", topic.toString());
                         subdata.put("payload", payload.toString());
-                        sendSubscribedData(subdata.toString(),true);
+                        sendUpdate(subdata);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -173,43 +166,45 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
 
                 public void onFailure(Throwable value) {
                     Log.d("mqttalabs", "connection failure: " + value.toString());
-                    sendConnectionData("failure",false);
+                    sendUpdate("failure");
                 }
             });
             //callbackContext.success("connecting");
         } else {
-            callbackContext.error("Expected one non-empty string argument.");
+            sendUpdate("Expected one non-empty string argument.");
         }
     }
 
 
-    private void publish(JSONArray args, final CallbackContext cbctx) throws JSONException {
+    private void publish(JSONArray args) throws JSONException {
         if(args.toString().length()>0){
-            connectionCb = cbctx;
+            if (connection == null) {
+                Log.i("mqttalabs", "connection is null");
+            }
             connection.publish(args.getString(0), args.getString(1).getBytes(), QoS.AT_LEAST_ONCE, false, new Callback<Void>() {
                 public void onSuccess(Void v) {
-                    sendPublishedData("published", true);
+                    sendOnceUpdate("published");
                     // the pubish operation completed successfully.
                 }
 
                 public void onFailure(Throwable value) {
-                    sendPublishedData("not published", false);
+                    sendOnceUpdate("not published");
+                    Log.e("mqttalabs", value.toString());
                 }
             });
 
         }else{
-            cbctx.error("error publishing");
+            syncCB.error("error publishing");
         }
     }
-    private void subscribe(JSONArray args, final CallbackContext cbctx) throws JSONException {
+    private void subscribe(JSONArray args) throws JSONException {
         if(args.toString().length()>0){
             Topic[] topics = {new Topic(args.getString(0), QoS.AT_LEAST_ONCE)};
-            connectionCb = cbctx;
             connection.subscribe(topics, new Callback<byte[]>() {
                 public void onSuccess(byte[] qoses) {
                     Log.d("mqttalabs", "subscribed");
 
-                    sendSubscribedData("subscribed", true);
+                    sendUpdate("subscribed");
 //                    PluginResult result = new PluginResult(PluginResult.Status.OK,qoses.toString());
 //                    result.setKeepCallback(true);
 //                    cbctx.sendPluginResult(result);
@@ -218,98 +213,79 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                 }
 
                 public void onFailure(Throwable value) {
-                    sendSubscribedData("not subscribed", false);
+                    sendUpdate("not subscribed");
                     Log.d("mqttalabs", "not subscribed\n" + value.toString());
                 }
             });
             //cbctx.success("subscribing");
         }else{
-            cbctx.error("error subscribing");
+            asyncCB.error("error subscribing");
         }
 
     }
-    private void disconnect(final CallbackContext cbctx) throws JSONException {
+    private void disconnect(){
+        Log.i("mqttplugin","disconnecting..");
         connection.disconnect(new Callback<Void>() {
             @Override
             public void onSuccess(Void value) {
-                cbctx.success("disconnect");
+                Log.i("mqttplugin","disconnect");
+                sendOnceUpdate("disconnect");
+                connection = null;
             }
 
             @Override
             public void onFailure(Throwable value) {
                 Log.e("mqtt plugin", value.toString());
-                cbctx.error("failure");
+                sendOnceUpdate("disconnect failure");
             }
         });
     }
-    private void unsubscribe(JSONArray args, final CallbackContext cbctx) throws JSONException {
+    private void unsubscribe(JSONArray args) throws JSONException {
         if(args.toString().length()>0){
             UTF8Buffer[] topic = new UTF8Buffer[1];
             topic[0] = new UTF8Buffer(args.getString(0));
-            connectionCb = cbctx;
             connection.unsubscribe(topic, new Callback<Void>() {
                 @Override
                 public void onSuccess(Void value) {
-                    sendUnsubscribedData(value.toString(),true);
+                    sendOnceUpdate("unsubscribe is success");
                 }
 
                 @Override
                 public void onFailure(Throwable value) {
-                    sendUnsubscribedData(value.toString(),false);
+                    sendOnceUpdate("unsubscribe is failure :" + value.toString());
                 }
             });
         }else{
-            cbctx.error("error unsubscribing");
+            syncCB.error("error unsubscribing");
         }
 
     }
-    private void sendSubscribedData(String message, boolean success){
-        PluginResult result;
-        if (connectionCb != null) {
-            if(success){
-                result = new PluginResult(PluginResult.Status.OK,message);
-            }else{
-                result = new PluginResult(PluginResult.Status.ERROR,message);
-            }
-            result.setKeepCallback(true);
-            connectionCb.sendPluginResult(result);
-        }
-    }
-    private void sendUnsubscribedData(String message, boolean success){
-        PluginResult result;
-        if (connectionCb != null) {
-            if(success){
-                result = new PluginResult(PluginResult.Status.OK,message);
-            }else{
-                result = new PluginResult(PluginResult.Status.ERROR,message);
-            }
-            result.setKeepCallback(true);
-            connectionCb.sendPluginResult(result);
-        }
-    }
-    private void sendPublishedData(String message, boolean success){
-        PluginResult result;
-        if (connectionCb != null) {
-            if (success){
-                result = new PluginResult(PluginResult.Status.OK,message);
-            }else{
-                result = new PluginResult(PluginResult.Status.ERROR,message);
-            }
-            result.setKeepCallback(true);
-            connectionCb.sendPluginResult(result);
-        }
-    }
-    private void sendConnectionData(String message,boolean success){
-        PluginResult result;
-        if (connectionCb != null) {
-            if(success){
-                result = new PluginResult(PluginResult.Status.OK,message);
-            }else{
-                result = new PluginResult(PluginResult.Status.ERROR,message);
-            }
+    private void sendOnceUpdate(String message){
+        if (syncCB != null) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK,message);
+            result.setKeepCallback(false);
+            syncCB.sendPluginResult(result);
 
-            result.setKeepCallback(true);
-            connectionCb.sendPluginResult(result);
+            Log.i("mqttalabs","\nfor subscribe the callback id is "+syncCB.getCallbackId());
         }
     }
+    private void sendUpdate(String message){
+        if (asyncCB != null) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK,message);
+            result.setKeepCallback(true);
+            asyncCB.sendPluginResult(result);
+
+            Log.i("mqttalabs","\nfor subscribe the callback id is "+asyncCB.getCallbackId());
+        }
+    }
+    private void sendUpdate(JSONObject message){
+        if (asyncCB != null) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK,message);
+            result.setKeepCallback(true);
+            asyncCB.sendPluginResult(result);
+
+            Log.i("mqttalabs","\nfor subscribe the callback id is "+asyncCB.getCallbackId());
+        }
+    }
+
 }
