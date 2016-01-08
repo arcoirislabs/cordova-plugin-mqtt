@@ -14,7 +14,7 @@ mqtt-cordova is plugin for building MQTT client for multiple platforms in Apache
 Install plugins via plugin repository or GitHub
 
 ```sh
-$ cordova plugin add com.arcoirislabs.plugin.mqtt
+$ cordova plugin add cordova-plugin-mqtt
 ```
 
 ```sh
