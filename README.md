@@ -56,12 +56,12 @@ For example you can configure the event in this way
 
 
 ##### connect
-To connect to a broker
+To connect to a broker. This plugin doesn't supports mqtt:// protocol. Use tcp:// instead.
 
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.connect({
   port:1883,
-  url:"mqtt://test.mosquitto.org",
+  url:"tcp://test.mosquitto.org",
   success:function(s){
 
   },
