@@ -7,7 +7,7 @@ mqtt-cordova is plugin for building MQTT client for multiple platforms in Apache
 4.x (Cordova Android)
 
 ### Version
-0.2.0
+0.2.2
 
 ### Installation
 
@@ -22,10 +22,12 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 ```
 
 ### Changelog
-1. No support for authentication yet.
-2. Added a better control over multiple subscriptions along with other methods' execution.
-3. Fixed multiple subscriptions issue. Now you can subscribe to multiple topics (the topic parameter doesn't accepts an array. Still needs a string. So subscribe to the events separately).
-4. Now every function is threaded. So no more blocking of UI due to previous implementation
+1. User authentication is supported
+2. Addded LWT (Last Will & Testament) feature support.
+3. Added more granular control to connection configuration.
+4. Removed onPublish method to read topic & payload. From now on the payload for any topic shall be read through document.addEventListener(<topic name>,function(payload){});
+5. Added more information in callback results for all callbacks.
+6. Added more granular configuration to publish & subscribe methods. Now you can set QoS & retain configuration to individual topics.
 
 ### Documentation
 
@@ -60,14 +62,28 @@ To connect to a broker. This plugin doesn't supports mqtt:// protocol. Use tcp:/
 
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.connect({
-  port:1883,
-  url:"tcp://test.mosquitto.org",
-  success:function(s){
-
-  },
-  error:function(e){
-
-  }
+    url:"tcp://test.mosquitto.org",
+    port:1883,
+    clientId:"YOUR_USER_ID_LESS_THAN_24_CHARS",
+    connectionTimeout:3000,
+    willTopicConfig:{
+        qos:0,
+        retain:true,
+        topic:"<will topic>",
+        payload:"<will topic message>"
+    },
+    username:"uname",
+    password:'pass',
+    keepAlive:60,
+    success:function(s){
+        console.log("connect success");
+    },
+    error:function(e){
+        console.log("connect error");
+    },
+    onConnectionLost:function (){
+        console.log("disconnect");
+    }
 })
 ```
 
@@ -78,6 +94,8 @@ To publish to a channel. You can use this function.
 cordova.plugins.CordovaMqTTPlugin.publish({
    topic:"sampletopic",
    payload:"hello from the plugin",
+   qos:0,
+   retain:false
   success:function(s){
 
   },
@@ -94,6 +112,7 @@ To subscribe to a channel. You can use this function.
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.subscribe({
    topic:"sampletopic",
+   qos:0
   success:function(s){
 
   },
@@ -101,11 +120,11 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
   
   },
   onPublish:function(topic,payload){
-
+    //This method is deprecated.
   }
 })
 ```
-The success callback can notify you once you are successfully subscribed, so it will be called only once. To access the topic and payload objects, you need to use the onPublish method.
+The success callback can notify you once you are successfully subscribed, so it will be called only once.
 If you want to read the payload, you can listen to the event by the name of the topic. For example if you have subscribed to the topic called "sampletopic". You can read the payload in this way.
 
 ```javascript
@@ -149,6 +168,7 @@ cordova.plugins.CordovaMqTTPlugin.disconnect({
 ### Todos
 
  - Plan support for new platforms (iOS, Windows Phone)
+ - Add background service support in Android version
 
 License
 ----
