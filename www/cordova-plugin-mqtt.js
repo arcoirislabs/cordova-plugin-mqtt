@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-mqtt.CordovaMqTTPlugin", function(require, exports, module) {
 var exec = require('cordova/exec'), cordova = require('cordova'),
 channel = require('cordova/channel'),
     utils = require('cordova/utils');
@@ -130,4 +129,3 @@ channel = require('cordova/channel'),
             args.error(e);
         }, "CordovaMqTTPlugin", "disconnect", []);
     }
-});
