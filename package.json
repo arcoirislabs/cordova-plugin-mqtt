@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mqtt",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Cordova plugin for MQTT (Message Queuing Telemetry Transport) protocol. Supports 3.x protocol. More platforms to be added in coming future.",
   "cordova": {
     "id": "cordova-plugin-mqtt",

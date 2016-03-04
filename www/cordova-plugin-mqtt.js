@@ -4,7 +4,7 @@ channel = require('cordova/channel'),
     utils = require('cordova/utils');
     
     exports.connect = function(args){
-    	var url,uname,pass;
+        var url,uname,pass;
         if (args.port!==undefined) {
             url = args.url+":"+args.port;
         } else{
@@ -49,9 +49,9 @@ channel = require('cordova/channel'),
         }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,args.isCleanSession,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain,args.version||"3.1.1"]);
     }
     exports.publish = function(args){
-    	if (args.retain===undefined) {
-    		args.retain=false;
-    	} 
+        if (args.retain===undefined) {
+            args.retain=false;
+        } 
         exec(function(data){
             cordova.fireDocumentEvent(data);
             switch(data.call){
@@ -76,9 +76,9 @@ channel = require('cordova/channel'),
         }, "CordovaMqTTPlugin", "publish", [args.topic,args.payload,args.qos||0,args.retain])
     }
     exports.subscribe = function(args){
-    	if (args.retain===undefined) {
-    		args.retain=false;
-    	} 
+        if (args.retain===undefined) {
+            args.retain=false;
+        } 
         exec(function(data){
             switch(data.call){
                 case "success":
@@ -93,7 +93,7 @@ channel = require('cordova/channel'),
         }, function(e){
             console.error(e)
             args.error(e);
-        }, "CordovaMqTTPlugin", "subscribe", [args.topic,args.qos||0,args.retain]);
+        }, "CordovaMqTTPlugin", "subscribe", [args.topic,args.qos||0]);
 
     }
     exports.unsubscribe = function(args){
