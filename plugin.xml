@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-mqtt" version="0.2.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-mqtt" version="0.2.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>CordovaMqTTPlugin</name>
     <description>The new MqTT plugin for Cordova</description>
-    <js-module name="CordovaMqTTPlugin" src="www/CordovaMqTTPlugin.js">
+    <js-module name="CordovaMqTTPlugin" src="www/cordova-plugin-mqtt.js">
         <clobbers target="cordova.plugins.CordovaMqTTPlugin" />
     </js-module>
     <platform name="android">
@@ -12,7 +12,7 @@
             </feature>
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
-        <framework src="org.fusesource.mqtt-client:mqtt-client:1.12" />
+        <framework src="org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2" />
         <source-file src="src/android/CordovaMqTTPlugin.java" target-dir="src/com/arcoirislabs/plugin/mqtt" />
     </platform>
 </plugin>
