@@ -25,7 +25,7 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 1. User authentication is supported
 2. Addded LWT (Last Will & Testament) feature support.
 3. Added more granular control to connection configuration.
-4. Removed onPublish method to read topic & payload. From now on the payload for any topic shall be read through document.addEventListener(<topic name>,function(payload){});
+4. Removed onPublish method to read topic & payload. From now on the payload for any topic shall be read through document.addEventListener(topic,function(payload){});
 5. Added more information in callback results for all callbacks.
 6. Added more granular configuration to publish & subscribe methods. Now you can set QoS & retain configuration to individual topics.
 
