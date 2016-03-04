@@ -9,9 +9,14 @@ channel = require('cordova/channel'),
         } else{
             url = args.url;
         };
-        if(args.willTopicConfig.retain===undefined){
-            args.willTopicConfig.retain = true;
+        if (args.willTopicConfig!==undefined) {
+            if(args.willTopicConfig.retain===undefined){
+                args.willTopicConfig.retain = true;
+            }
+        } else {
+            args.willTopicConfig = new Object();
         }
+            
         exec(function(cd){
             switch(cd.call){
                 case "connected":
@@ -45,7 +50,7 @@ channel = require('cordova/channel'),
             }
         }, function(e){
             console.error(e)
-        }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,args.isCleanSession,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain,args.version||"3.1.1"]);
+        }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,args.isCleanSession,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
     }
     exports.publish = function(args){
         if (args.retain===undefined) {

@@ -130,7 +130,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                     Log.i("mqttalabs", cause.toString());
                     JSONObject dis = new JSONObject();
                     try {
-                        dis.put("type", "connect");
+                        dis.put("type", "connectionLost");
                         dis.put("message", cause.toString());
                         dis.put("call", "disconnected");
                         dis.put("connectionStatus", client.isConnected());
@@ -141,10 +141,10 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                 }
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    Log.i("mqttalabs", "topic is " + topic + ". payload is " + message.toString());
+                    //Log.i("mqttalabs", "topic is " + topic + ". payload is " + message.toString());
                     JSONObject dis = new JSONObject();
                     try {
-                        dis.put("type", "connect");
+                        dis.put("type", "messageArrived");
                         dis.put("topic", topic);
                         dis.put("payload", message.toString());
                         dis.put("call", "onPublish");
@@ -188,7 +188,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                     connected = true;
                     JSONObject dis = new JSONObject();
                     try {
-                        dis.put("type", "connect");
+                        dis.put("type", "connected");
                         dis.put("call", "connected");
                         dis.put("response", "connected");
                         dis.put("connectionStatus", client.isConnected());
@@ -203,9 +203,9 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                     connected = false;
                     JSONObject dis = new JSONObject();
                     try {
-                        dis.put("type", "connect");
+                        dis.put("type", "failure");
                         dis.put("call", "failure");
-                        dis.put("response", "fail to connect connected");
+                        dis.put("response", "fail to connect");
                         dis.put("message", exception.toString());
                         dis.put("connectionStatus", client.isConnected());
                         sendUpdate(dis);

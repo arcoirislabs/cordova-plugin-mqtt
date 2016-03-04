@@ -7,7 +7,7 @@ mqtt-cordova is plugin for building MQTT client for multiple platforms in Apache
 4.x (Cordova Android)
 
 ### Version
-0.2.3
+0.2.4 (Fixed callbacks)
 
 ### Installation
 
