@@ -146,7 +146,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                     try {
                         dis.put("type", "messageArrived");
                         dis.put("topic", topic);
-                        dis.put("payload", message.toString());
+                        dis.put("payload", message);
                         dis.put("call", "onPublish");
                         dis.put("connectionStatus", client.isConnected());
                         dis.put("qos",message.getQos());
@@ -224,40 +224,45 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
         payload.setPayload(args.getString(1).getBytes());
         payload.setQos(args.getInt(2));
         payload.setRetained(args.getBoolean(3));
-
+        Log.i("mqttalabs", "Topic is " + args.getString(0) + ". Payload is " + args.getString(1));
         try {
-            client.publish(args.getString(0), payload, null, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    JSONObject dis = new JSONObject();
-                    try {
-                        dis.put("type", "publish");
-                        dis.put("call", "success");
-                        dis.put("response", "published");
-                        dis.put("isPayloadDuplicate", payload.isDuplicate());
-                        dis.put("qos", payload.getQos());
-                        dis.put("connectionStatus", client.isConnected());
-                        sendOnceUpdate(dis);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            if (client!=null){
+                client.publish(args.getString(0), payload, null, new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        JSONObject dis = new JSONObject();
+                        try {
+                            dis.put("type", "publish");
+                            dis.put("call", "success");
+                            dis.put("response", "published");
+                            dis.put("isPayloadDuplicate", payload.isDuplicate());
+                            dis.put("qos", payload.getQos());
+                            dis.put("connectionStatus", client.isConnected());
+                            sendOnceUpdate(dis);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    JSONObject dis = new JSONObject();
-                    try {
-                        dis.put("type", "publish");
-                        dis.put("call", "failure");
-                        dis.put("response", "not published");
-                        dis.put("isPayloadDuplicate", payload.isDuplicate());
-                        dis.put("qos", payload.getQos());
-                        dis.put("connectionStatus", client.isConnected());
-                        sendOnceUpdate(dis);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                        JSONObject dis = new JSONObject();
+                        try {
+                            dis.put("type", "publish");
+                            dis.put("call", "failure");
+                            dis.put("response", "not published");
+                            dis.put("isPayloadDuplicate", payload.isDuplicate());
+                            dis.put("qos", payload.getQos());
+                            dis.put("connectionStatus", client.isConnected());
+                            sendOnceUpdate(dis);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            }else{
+                Log.e("mqttalabs","client var is null");
+            }
+
         } catch (MqttException e) {
             e.printStackTrace();
         }
