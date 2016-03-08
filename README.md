@@ -62,8 +62,8 @@ To connect to a broker. This plugin doesn't supports mqtt:// protocol. Use tcp:/
 
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.connect({
-    url:"tcp://test.mosquitto.org",
-    port:1883,
+    url:"tcp://test.mosquitto.org", //a public broker used for testing purposes only. Try using a self hosted broker for production.
+    port:1883, 
     clientId:"YOUR_USER_ID_LESS_THAN_24_CHARS",
     connectionTimeout:3000,
     willTopicConfig:{
