@@ -1,6 +1,6 @@
-# mqtt-cordova (Working)
+# cordova-plugin-mqtt (Working)
 
-mqtt-cordova is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform will be added and next Windows Phone will be looked forward. 
+cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform is present and next support is planned for iOS & Windows Phone. 
 
 ### Cordova platform support
 5.x (CLI)
