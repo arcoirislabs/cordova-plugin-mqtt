@@ -118,13 +118,10 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
   },
   error:function(e){
   
-  },
-  onPublish:function(topic,payload){
-    //This method is deprecated.
   }
 })
 ```
-The success callback can notify you once you are successfully subscribed, so it will be called only once.
+The success callback can notify you once you are successfully subscribed, so it will be called only once. The onPublish method is deprecated.
 If you want to read the payload, you can listen to the event by the name of the topic. For example if you have subscribed to the topic called "sampletopic". You can read the payload in this way.
 
 ```javascript
