@@ -7,7 +7,7 @@ cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in
 4.x (Cordova Android)
 
 ### Version
-0.2.6 (Fixed some bugs)
+0.2.7 (Fixed some bugs)
 
 ### Installation
 
@@ -22,12 +22,9 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 ```
 
 ### Changelog
-1. User authentication is supported
-2. Addded LWT (Last Will & Testament) feature support.
-3. Added more granular control to connection configuration.
-4. Removed onPublish method to read topic & payload. From now on the payload for any topic shall be read through document.addEventListener(topic,function(payload){});
-5. Added more information in callback results for all callbacks.
-6. Added more granular configuration to publish & subscribe methods. Now you can set QoS & retain configuration to individual topics.
+1. New sample application is added.
+2. Fixed the subscribe callback issue.
+3. Some minor workarounds.
 
 ### Documentation
 
