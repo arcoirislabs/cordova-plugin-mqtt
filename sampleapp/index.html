@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+    
+-->
+<html>
+    <head>
+        
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <title>Mqtt Test</title>
+    </head>
+    <body>
+        <div>
+            <h4>Connect</h4>
+            <p>P.S:- "mqtt://" protocol is not supported by this plugin. Instead use "tcp://" which works with any broker.</p>
+            <label for="url">Url:&nbsp;</label><input type="text" id="url" name="url"><br>
+            <label for="port">Port:&nbsp;</label><input type="number" id="port" name="port"><br>
+            <label for="clientid">Client id</label><input type="text" id="clientId" name="clientid"><br>
+            <button id="connect">Connect</button><button id="disconnect" style="display:none">Disconnect</button>
+        </div>
+        <div>
+            <h4>Subscribe</h4>
+            <label for="topic_sub">Topic:&nbsp;</label><input type="text" id="topic_sub" name="topic_sub"><br>
+            <button id="subscribe">Subscribe</button><button id="unsubscribe" style="display:none">Unsubscribe</button>
+        </div>
+        <div>
+            <h4>Publish</h4>
+            <label for="topic_pub">Topic:&nbsp;</label><input type="text" id="topic_pub" name="topic_pub"><br>
+            <label for="payload">Payload:&nbsp;</label><input type="text" id="payload" name="payload">
+            <button id="publish">Publish</button>
+        </div>
+        <div>
+            <h4>Activity Log</h4>
+            <div id="activity"></div>
+        </div>    
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>

@@ -3,7 +3,7 @@ channel = require('cordova/channel'),
     utils = require('cordova/utils');
     
     exports.connect = function(args){
-        var url,uname,pass;
+        var url,uname,pass,iscls;
         if (args.port!==undefined) {
             url = args.url+":"+args.port;
         } else{
@@ -15,6 +15,11 @@ channel = require('cordova/channel'),
             }
         } else {
             args.willTopicConfig = new Object();
+        }
+        if (args.isCleanSession===undefined) {
+            iscls = true;
+        } else {
+            iscls = args.isCleanSession;
         }
             
         exec(function(cd){
@@ -50,7 +55,7 @@ channel = require('cordova/channel'),
             }
         }, function(e){
             console.error(e)
-        }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,args.isCleanSession,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
+        }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
     }
     exports.publish = function(args){
         if (args.retain===undefined) {

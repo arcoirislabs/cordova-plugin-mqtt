@@ -279,6 +279,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                         dis.put("call", "success");
                         dis.put("response", "subscribed to " + args.getString(0));
                         dis.put("connectionStatus", client.isConnected());
+                        sendOnceUpdate(dis);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -293,6 +294,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                         dis.put("response", "subscribed to " + args.getString(0));
                         dis.put("message", exception.getMessage());
                         dis.put("connectionStatus", client.isConnected());
+                        sendOnceUpdate(dis);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
