@@ -7,7 +7,7 @@ cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in
 4.x (Cordova Android)
 
 ### Version
-0.2.7 (Fixed some bugs)
+0.2.7 (Fixed some bugs. Check out the sample app code to build a proper MQTT client.)
 
 ### Installation
 
