@@ -28,6 +28,9 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 
 ### Documentation
 
+[UPDATE]
+
+We have written a tutorial for this plugin over [here](https://medium.com/@arcoirislabs/using-mqtt-on-apache-cordova-564d4fab526b). Kindly check out before you start developing. Cheers
 ##### Methods
 1. [connect](#connect)
 2. [publish](#publish)
