@@ -114,7 +114,7 @@ To subscribe to a channel. You can use this function.
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.subscribe({
    topic:"sampletopic",
-   qos:0
+   qos:0,
   success:function(s){
 
   },
