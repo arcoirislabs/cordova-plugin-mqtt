@@ -2,19 +2,19 @@
 
 [![Join the chat at https://gitter.im/arcoirislabs/cordova-plugin-mqtt](https://badges.gitter.im/arcoirislabs/cordova-plugin-mqtt.svg)](https://gitter.im/arcoirislabs/cordova-plugin-mqtt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![NPM](https://nodei.co/npm/cordova-plugin-mqtt.png)](https://npmjs.org/package/cordova-plugin-mqtt)
+
 cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform is present and next support is planned for iOS & Windows Phone. 
 
 ### Cordova platform support
 5.x (CLI)
 4.x (Cordova Android)
-3.x (Cordova iOS)
 
 ### Note
-1. If you are using this plugin in iOS platform. Kindly read this section.
-3. From v3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
+1. From v3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
 
 ### Version
-0.2.8 (Adding a prelimnary iOS platform support. Don't use it yet. Check the Changelog for more details)
+0.2.8 (Adding a prelimnary iOS platform support & many more improvements. Don't use it yet. Check the Changelog for more details)
 
 ### Installation
 
@@ -33,7 +33,7 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 2. Restored the onPublish method. (Sorry for the inconvenience)
 3. Deprecating the event listeners to favour the Topic routers as it seems favourable from performance point of view.
 4. Adding a default Topic router [mqtt-emitter](https://github.com/RangerMauve/mqtt-emitter). Thank you for your support and co-operation [@RangerMauve](https://github.com/RangerMauve).
-5. Adding an unstable iOS support to the plugin. Kindly wait for next release for a stable, production ready implementation.
+5. Topic router has enabled us to listen to topics with single and multi-level wildcards based on topic patterns.
 
 ### Documentation
 
@@ -47,6 +47,7 @@ We have written a tutorial for this plugin over [here](https://medium.com/@arcoi
 4. [unsubscribe](#unsubscribe)
 5. [disconnect](#disconnect)
 6. [router](#router)
+7. [listen](#listen)
 
 ##### Events
 Default listeners you can program anywhere for following events
@@ -123,11 +124,49 @@ cordova.plugins.CordovaMqTTPlugin.publish({
 In order to debug the publish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback. 
 
 ##### subscribe
-To subscribe to a channel. You can use this function.
+To subscribe to a channel. You can use this function. You can also use wildcard based subscription using following ways
 
 ```javascript
+//Simple subscribe
 cordova.plugins.CordovaMqTTPlugin.subscribe({
    topic:"sampletopic",
+   qos:0,
+  success:function(s){
+
+  },
+  error:function(e){
+  
+  }
+});
+
+//Single level wildcard subscribe
+cordova.plugins.CordovaMqTTPlugin.subscribe({
+   topic:"/+/sampletopic",
+   qos:0,
+  success:function(s){
+
+  },
+  error:function(e){
+  
+  }
+});
+
+//multi level wildcard subscribe
+cordova.plugins.CordovaMqTTPlugin.subscribe({
+   topic:"/sampletopic/#",
+   qos:0,
+  success:function(s){
+
+  },
+  error:function(e){
+  
+  }
+});
+
+//Using both kinds of wildcards
+
+cordova.plugins.CordovaMqTTPlugin.subscribe({
+   topic:"/+/sampletopic/#",
    qos:0,
   success:function(s){
 
@@ -140,10 +179,21 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
 The success callback can notify you once you are successfully subscribed, so it will be called only once. The onPublish method is deprecated.
 If you want to read the payload, you can listen to the event by the name of the topic. For example if you have subscribed to the topic called "sampletopic". You can read the payload in this way.
 
+#####Update:-
+We are introducing topic pattern support to listen to certain topics in a way the developer wishes to. This topic pattern helps developer to make a common listener to different topics sharing same levels using single and multi-level wildcards. 
+
 ```javascript
+ //Deprecated
  document.addEventListener("sampletopic",function(e){
   console.log(e.payload)
- },false)
+ },false);
+ 
+ //New way to listen to topics
+ cordova.plugins.CordovaMqTTPlugin.listen("/topic/+singlewc/#multiwc",function(payload,params){
+  //Callback:- (If the user has published to /topic/room/hall)
+  //payload : contains payload data
+  //params : {singlewc:room,multiwc:hall}
+})
 ```
 
 ##### unsubscribe
@@ -183,8 +233,10 @@ cordova.plugins.CordovaMqTTPlugin.disconnect({
 This function provides you the access to all the topic router functions you have used. If you have used a the stock topic router you can access the payload for a topic by this method.
 ```javascript
 //Declare this function in any scope to access the router function "on" to receive the payload for certain topic
-cordova.plugins.CordovaMqTTPlugin.router.on("/topic/#",function(topic,payload){
-  
+cordova.plugins.CordovaMqTTPlugin.router.on("/topic/+singlewc/#multiwc",function(payload,params){
+  //Callback:- (If the user has published to /topic/room/hall)
+  //payload : contains payload data
+  //params : {singlewc:room,multiwc:hall}
 });
 
 //To get a callback on topic subscribe/unsubscribe event, you can listen by this method
@@ -196,11 +248,25 @@ cordova.plugins.CordovaMqTTPlugin.router.onremove(function(topic){
 });
 ```
 
+##### listen
+
+This function lets you listen to certain topic pattern specifically constructed by topic patters as shown below.
+```javascript
+//Declare this function in any scope to access the router function "on" to receive the payload for certain topic
+cordova.plugins.CordovaMqTTPlugin.listen("/topic/+singlewc/#multiwc",function(payload,params){
+  //Callback:- (If the user has published to /topic/room/hall)
+  //payload : contains payload data
+  //params : {singlewc:room,multiwc:hall}
+});
+
+
+```
+
 ### Todos
 
  - Add a stable iOS support in v0.3.0 
  - Plan support for new platform (Windows Phone)
- - Add background service support in Android version
+ - Add background service support in Android version to save the payload related from certain topics in a DB when the app is in background.
 
 
 License
