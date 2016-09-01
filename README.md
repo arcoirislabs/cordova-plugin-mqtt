@@ -7,9 +7,14 @@ cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in
 ### Cordova platform support
 5.x (CLI)
 4.x (Cordova Android)
+3.x (Cordova iOS)
+
+### Note
+1. If you are using this plugin in iOS platform. Kindly read this section.
+3. From v3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
 
 ### Version
-0.2.7 (Fixed some bugs. Check out the sample app code to build a proper MQTT client.)
+0.2.8 (Adding a prelimnary iOS platform support. Don't use it yet. Check the Changelog for more details)
 
 ### Installation
 
@@ -24,9 +29,11 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 ```
 
 ### Changelog
-1. New sample application is added.
-2. Fixed the subscribe callback issue.
-3. Some minor workarounds.
+1. Added support to custom Topic routers/emitters. Kindly check out the Topic router section in the Wiki.
+2. Restored the onPublish method. (Sorry for the inconvenience)
+3. Deprecating the event listeners to favour the Topic routers as it seems favourable from performance point of view.
+4. Adding a default Topic router [mqtt-emitter](https://github.com/RangerMauve/mqtt-emitter). Thank you for your support and co-operation [@RangerMauve](https://github.com/RangerMauve).
+5. Adding an unstable iOS support to the plugin. Kindly wait for next release for a stable, production ready implementation.
 
 ### Documentation
 
@@ -39,6 +46,7 @@ We have written a tutorial for this plugin over [here](https://medium.com/@arcoi
 3. [subscribe](#subscribe)
 4. [unsubscribe](#unsubscribe)
 5. [disconnect](#disconnect)
+6. [router](#router)
 
 ##### Events
 Default listeners you can program anywhere for following events
@@ -51,6 +59,7 @@ Default listeners you can program anywhere for following events
  - not published
 
 For example you can configure the event in this way
+Deprecated
 
  ```javascript
  document.addEventListener("connected",function(e){
@@ -69,8 +78,8 @@ cordova.plugins.CordovaMqTTPlugin.connect({
     clientId:"YOUR_USER_ID_LESS_THAN_24_CHARS",
     connectionTimeout:3000,
     willTopicConfig:{
-        qos:0,
-        retain:true,
+        qos:0, //default is 0
+        retain:true, //default is true
         topic:"<will topic>",
         payload:"<will topic message>"
     },
@@ -85,6 +94,11 @@ cordova.plugins.CordovaMqTTPlugin.connect({
     },
     onConnectionLost:function (){
         console.log("disconnect");
+    },
+    routerConfig:{
+        router:routerObject //instantiated router object
+        publishMethod:"emit", //refer your custom router documentation to get the emitter/publishing function name. The parameter should be a string and not a function.
+        useDefaultRouter:false //Set false to use your own topic router implementation. Set true to use the stock topic router implemented in the plugin.
     }
 })
 ```
@@ -164,10 +178,30 @@ cordova.plugins.CordovaMqTTPlugin.disconnect({
 })
 ```
 
+##### router
+
+This function provides you the access to all the topic router functions you have used. If you have used a the stock topic router you can access the payload for a topic by this method.
+```javascript
+//Declare this function in any scope to access the router function "on" to receive the payload for certain topic
+cordova.plugins.CordovaMqTTPlugin.router.on("/topic/#",function(topic,payload){
+  
+});
+
+//To get a callback on topic subscribe/unsubscribe event, you can listen by this method
+cordova.plugins.CordovaMqTTPlugin.router.onadd(function(topic){
+  
+});
+cordova.plugins.CordovaMqTTPlugin.router.onremove(function(topic){
+  
+});
+```
+
 ### Todos
 
- - Plan support for new platforms (iOS, Windows Phone)
+ - Add a stable iOS support in v0.3.0 
+ - Plan support for new platform (Windows Phone)
  - Add background service support in Android version
+
 
 License
 ----
