@@ -4,14 +4,14 @@
 
 [![NPM](https://nodei.co/npm/cordova-plugin-mqtt.png)](https://npmjs.org/package/cordova-plugin-mqtt)
 
-cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform is present and next support is planned for iOS & Windows Phone. 
+cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform is present and next support is planned for iOS & Windows Phone.
 
 ### Cordova platform support
 5.x (CLI)
 4.x (Cordova Android)
 
 ### Note
-1. From v3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
+From v3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
 
 ### Version
 0.2.8 (Adding a prelimnary iOS platform support & many more improvements. Don't use it yet. Check the Changelog for more details)
@@ -75,7 +75,7 @@ To connect to a broker. This plugin doesn't supports mqtt:// protocol. Use tcp:/
 ```javascript
 cordova.plugins.CordovaMqTTPlugin.connect({
     url:"tcp://test.mosquitto.org", //a public broker used for testing purposes only. Try using a self hosted broker for production.
-    port:1883, 
+    port:1883,
     clientId:"YOUR_USER_ID_LESS_THAN_24_CHARS",
     connectionTimeout:3000,
     willTopicConfig:{
@@ -117,11 +117,11 @@ cordova.plugins.CordovaMqTTPlugin.publish({
 
   },
   error:function(e){
-  
+
   }
 })
 ```
-In order to debug the publish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback. 
+In order to debug the publish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback.
 
 ##### subscribe
 To subscribe to a channel. You can use this function. You can also use wildcard based subscription using following ways
@@ -135,7 +135,7 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
 
   },
   error:function(e){
-  
+
   }
 });
 
@@ -147,7 +147,7 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
 
   },
   error:function(e){
-  
+
   }
 });
 
@@ -159,7 +159,7 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
 
   },
   error:function(e){
-  
+
   }
 });
 
@@ -172,7 +172,7 @@ cordova.plugins.CordovaMqTTPlugin.subscribe({
 
   },
   error:function(e){
-  
+
   }
 })
 ```
@@ -180,14 +180,14 @@ The success callback can notify you once you are successfully subscribed, so it 
 If you want to read the payload, you can listen to the event by the name of the topic. For example if you have subscribed to the topic called "sampletopic". You can read the payload in this way.
 
 #####Update:-
-We are introducing topic pattern support to listen to certain topics in a way the developer wishes to. This topic pattern helps developer to make a common listener to different topics sharing same levels using single and multi-level wildcards. 
+We are introducing topic pattern support to listen to certain topics in a way the developer wishes to. This topic pattern helps developer to make a common listener to different topics sharing same levels using single and multi-level wildcards.
 
 ```javascript
  //Deprecated
  document.addEventListener("sampletopic",function(e){
   console.log(e.payload)
  },false);
- 
+
  //New way to listen to topics
  cordova.plugins.CordovaMqTTPlugin.listen("/topic/+singlewc/#multiwc",function(payload,params){
   //Callback:- (If the user has published to /topic/room/hall)
@@ -207,7 +207,7 @@ cordova.plugins.CordovaMqTTPlugin.unsubscribe({
 
   },
   error:function(e){
-  
+
   }
 })
 ```
@@ -223,7 +223,7 @@ cordova.plugins.CordovaMqTTPlugin.disconnect({
 
   },
   error:function(e){
-  
+
   }
 })
 ```
@@ -241,10 +241,10 @@ cordova.plugins.CordovaMqTTPlugin.router.on("/topic/+singlewc/#multiwc",function
 
 //To get a callback on topic subscribe/unsubscribe event, you can listen by this method
 cordova.plugins.CordovaMqTTPlugin.router.onadd(function(topic){
-  
+
 });
 cordova.plugins.CordovaMqTTPlugin.router.onremove(function(topic){
-  
+
 });
 ```
 
@@ -264,7 +264,7 @@ cordova.plugins.CordovaMqTTPlugin.listen("/topic/+singlewc/#multiwc",function(pa
 
 ### Todos
 
- - Add a stable iOS support in v0.3.0 
+ - Add a stable iOS support in v0.3.0
  - Plan support for new platform (Windows Phone)
  - Add background service support in Android version to save the payload related from certain topics in a DB when the app is in background.
 
@@ -273,5 +273,3 @@ License
 ----
 
 MIT
-
-
