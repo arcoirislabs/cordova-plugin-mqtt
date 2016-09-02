@@ -20,11 +20,11 @@ var app = {
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {  
+    receivedEvent: function(id) {
         document.getElementById("connect").addEventListener('touchend',function(ev){
             cordova.plugins.CordovaMqTTPlugin.connect({
                 url:document.getElementById("url").value, //a public broker used for testing purposes only. Try using a self hosted broker for production.
-                port:document.getElementById("port").value, 
+                port:document.getElementById("port").value,
                 clientId:document.getElementById("clientId").value,
                 success:function(s){
                     connect = true;
@@ -80,11 +80,17 @@ var app = {
                   document.getElementById("unsubscribe").style.display = "block";
                   document.getElementById("activity").innerHTML += "--> Success: you are subscribed to the topic, "+document.getElementById("topic_sub").value+"<br>"
                   //get your payload here
+                  //Deprecated method
                   document.addEventListener(document.getElementById("topic_sub").value,function (e) {
                       e.preventDefault();
-                      
+
                       document.getElementById("activity").innerHTML += "--> Payload for"+e.topic+" topic: "+JSON.stringify(e.payload)+"<br>"
                   });
+
+                  cordova.plugins.CordovaMqTTPlugin.listen(document.getElementById("topic_sub").value,function (payload,params,topic,topic_pattern) {
+                      //params will be an empty object if topic pattern is NOT used. 
+                      document.getElementById("activity").innerHTML += "--> Payload for"+topic+" topic: "+JSON.stringify(payload)+"<br>"
+                  })
                 },
                 error:function(e){
                   document.getElementById("activity").innerHTML += "--> Error: something is wrong when subscribing to this topic, "+e+"<br>";
@@ -94,7 +100,7 @@ var app = {
                   console.log(e);
                 }
               });
-            }                
+            }
         });
         document.getElementById("unsubscribe").addEventListener('touchend',function(ev){
             cordova.plugins.CordovaMqTTPlugin.unsubscribe({
