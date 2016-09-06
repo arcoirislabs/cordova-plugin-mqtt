@@ -12,7 +12,7 @@ cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in
 From v0.3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
 
 ### Version
-0.2.9 (Adding a prelimnary iOS platform support & many more improvements. Don't use it yet. Check the Changelog for more details)
+0.3.0 (Fixing bugs)
 
 ### Installation
 
@@ -27,7 +27,8 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 ```
 
 ### Changelog
-1. Added support to custom Topic routers/emitters. Kindly check out the Topic router section in the Wiki.
+1. Fixing a bug of removing listeners on unsubscribe.
+2. Added support to custom Topic routers/emitters. Kindly check out the Topic router section in the Wiki.
 2. Restored the onPublish method. (Sorry for the inconvenience)
 3. Deprecating the event listeners to favour the Topic routers as it seems favourable from performance point of view.
 4. Adding a default Topic router [mqtt-emitter](https://github.com/RangerMauve/mqtt-emitter). Thank you for your support and co-operation [@RangerMauve](https://github.com/RangerMauve).
