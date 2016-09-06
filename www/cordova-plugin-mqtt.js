@@ -139,7 +139,6 @@ channel = require('cordova/channel'),
                     if (args.success!==undefined) {
                         args.success(data);
                     }
-
                     break;
                 case "failure":
                     delete data['call'];
@@ -162,6 +161,9 @@ channel = require('cordova/channel'),
                     delete data['call'];
                     if (args.success!==undefined) {
                         args.success(data);
+                    }
+                    if (router!==null) {
+                        router.removeListener(args.topic);
                     }
                     break;
                 case "failure":

@@ -12,7 +12,7 @@ cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in
 From v3.x, the eventListner implementation shall be deprecated. Kindly take a note of this.
 
 ### Version
-0.2.9 (Adding a prelimnary iOS platform support & many more improvements. Don't use it yet. Check the Changelog for more details)
+0.3.0 (Adding a prelimnary iOS platform support & many more improvements. Don't use it yet. Check the Changelog for more details)
 
 ### Installation
 
