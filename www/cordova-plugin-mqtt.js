@@ -181,8 +181,8 @@ channel = require('cordova/channel'),
             switch(data.call){
                 case "success":
                     delete data['call'];
-                    if (args.error!==undefined) {
-                        args.error(data);
+                    if (args.success!==undefined) {
+                        args.success(data);
                     }
                     break;
                 case "failure":
