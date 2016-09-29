@@ -10,8 +10,11 @@ channel = require('cordova/channel'),
     utils = require('cordova/utils');
     var url,uname,pass,iscls,router = null;
     var isDefault = true;
+    
     exports.connect = function(args){
-
+        //SSL support is coming soon
+        //var urgx = /(^(tcp|ssl|local)&?:\/\/[^\s]+\:[^\s]{2,})/g;
+        var urgx = /(^(tcp|local)&?:\/\/[^\s]+\:[^\s]{2,})/g;
         if (args.port!==undefined) {
             url = args.url+":"+args.port;
         } else{
@@ -50,7 +53,7 @@ channel = require('cordova/channel'),
         } else {
             router = new ME();
         }
-        if(url.length>0){
+        if(url.length>0&&urgx.exec(url)!==null){
             exec(function(cd){
                 switch(cd.call){
                     case "connected":
@@ -101,7 +104,7 @@ channel = require('cordova/channel'),
                 console.error(e);
             }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
         } else{
-            console.error("Please provide the URL to connect");
+            console.error("Please provide the URL to connect. If entered then please check the URL format. We support only tcp:// & local:// protocols");
         }
         
     }
