@@ -1,8 +1,9 @@
 # cordova-plugin-mqtt
 
+[![npm version](https://badge.fury.io/js/cordova-plugin-mqtt.svg)](https://badge.fury.io/js/cordova-plugin-mqtt)
 [![Join the chat at https://gitter.im/arcoirislabs/cordova-plugin-mqtt](https://badges.gitter.im/arcoirislabs/cordova-plugin-mqtt.svg)](https://gitter.im/arcoirislabs/cordova-plugin-mqtt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Dependency Status](https://dependencyci.com/github/arcoirislabs/cordova-plugin-mqtt/badge)](https://dependencyci.com/github/arcoirislabs/cordova-plugin-mqtt)
-[![npm version](https://badge.fury.io/js/cordova-plugin-mqtt.svg)](https://badge.fury.io/js/cordova-plugin-mqtt)
+
 
 cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform is present and next support is planned for iOS & Windows Phone.
 
