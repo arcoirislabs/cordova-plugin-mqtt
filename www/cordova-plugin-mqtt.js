@@ -50,133 +50,146 @@ channel = require('cordova/channel'),
         } else {
             router = new ME();
         }
+        if(url.length>0){
+            exec(function(cd){
+                switch(cd.call){
+                    case "connected":
+                        delete cd['call'];
+                        if(args.success!==undefined){
+                            args.success(cd);
+                        };
+                        cordova.fireDocumentEvent("connected",cd);
+                        console.warn("Cordova Plugin Warning: The eventListner implmentation to read the published payloads shall be discontinued from the 0.3.0 version. Kindly take a note of this change.")
+                        break;
+                    case "disconnected":
+                        delete cd['call'];
+                        if(args.error!==undefined){
+                            args.error(cd);
+                        };
+                        cordova.fireDocumentEvent("disconnected",cd);
+                        break;
+                    case "failure":
+                        delete cd['call'];
+                        if(args.onConnectionLost!==undefined){
+                            args.onConnectionLost(cd);
+                        };
+                        cordova.fireDocumentEvent("failure",cd);
+                        break;
+                    case "onPublish":
+                        delete cd['call'];
+                        if(args.onPublish!==undefined){
+                            args.onPublish(cd.topic,cd.payload);
+                        }
+                        if(router!==null){
+                            if (args.routerConfig!==undefined) {
+                                if (args.routerConfig.publishMethod!==undefined) {
+                                    router[args.routerConfig.publishMethod](cd.topic,cd.payload);
+                                }
 
-        exec(function(cd){
-            switch(cd.call){
-                case "connected":
-                    delete cd['call'];
-                    if(args.success!==undefined){
-                        args.success(cd);
-                    };
-                    cordova.fireDocumentEvent("connected",cd);
-                    console.warn("Cordova Plugin Warning: The eventListner implmentation to read the published payloads shall be discontinued from the 0.3.0 version. Kindly take a note of this change.")
-                    break;
-                case "disconnected":
-                    delete cd['call'];
-                    if(args.error!==undefined){
-                        args.error(cd);
-                    };
-                    cordova.fireDocumentEvent("disconnected",cd);
-                    break;
-                case "failure":
-                    delete cd['call'];
-                    if(args.onConnectionLost!==undefined){
-                        args.onConnectionLost(cd);
-                    };
-                    cordova.fireDocumentEvent("failure",cd);
-                    break;
-                case "onPublish":
-                    delete cd['call'];
-                    if(args.onPublish!==undefined){
-                        args.onPublish(cd.topic,cd.payload);
-                    }
-                    if(router!==null){
-                        if (args.routerConfig!==undefined) {
-                            if (args.routerConfig.publishMethod!==undefined) {
-                                router[args.routerConfig.publishMethod](cd.topic,cd.payload);
+                            } else {
+                                router.emit(cd.topic,cd.payload);
                             }
 
-                        } else {
-                            router.emit(cd.topic,cd.payload);
                         }
-
-                    }
-                    cordova.fireDocumentEvent(cd.topic,cd);
-                    break;
-                default:
-                    console.log(cd);
-                    break;
-            }
-        }, function(e){
-            console.error(e);
-        }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
+                        cordova.fireDocumentEvent(cd.topic,cd);
+                        break;
+                    default:
+                        console.log(cd);
+                        break;
+                }
+            }, function(e){
+                console.error(e);
+            }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60,iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
+        } else{
+            console.error("Please provide the URL to connect");
+        }
+        
     }
     exports.publish = function(args){
-        if (args.retain===undefined) {
-            args.retain=false;
-        }
-        exec(function(data){
-            cordova.fireDocumentEvent(data);
-            switch(data.call){
-                case "success":
-                    delete data['call'];
-                    if(args.success!=undefined){
-                        args.success(data);
-                    }
+        (args.retain===undefined) ? args.retain=false : args.retain=true;
+        if(args.topic.length>0){
+            exec(function(data){
+                cordova.fireDocumentEvent(data);
+                switch(data.call){
+                    case "success":
+                        delete data['call'];
+                        if(args.success!=undefined){
+                            args.success(data);
+                        }
 
-                    break;
-                case "failure":
-                    delete data['call'];
-                    if(args.success!=undefined){
-                         args.error(data);
-                    }
-                    break;
-            }
-        }, function(e){
-            if(args.error!=undefined){
-                args.error(e);
-            }
-        }, "CordovaMqTTPlugin", "publish", [args.topic,args.payload,args.qos||0,args.retain])
+                        break;
+                    case "failure":
+                        delete data['call'];
+                        if(args.success!=undefined){
+                            args.error(data);
+                        }
+                        break;
+                }
+            }, function(e){
+                if(args.error!=undefined){
+                    args.error(e);
+                }
+            }, "CordovaMqTTPlugin", "publish", [args.topic,args.payload,args.qos||0,args.retain]);
+        } else{
+            console.error("Please provide a topic string in topic argument");
+        }
+        
     }
     exports.subscribe = function(args){
-        if (args.retain===undefined) {
-            args.retain=false;
-        }
-        exec(function(data){
-            switch(data.call){
-                case "success":
-                    delete data['call'];
-                    if (args.success!==undefined) {
-                        args.success(data);
-                    }
-                    break;
-                case "failure":
-                    delete data['call'];
-                    if (args.error!==undefined) {
-                        args.error(data);
-                    }
+        (args.retain===undefined) ? args.retain=false : args.retain=true;
+        if(args.topic.length>0){
+            exec(function(data){
+                switch(data.call){
+                    case "success":
+                        delete data['call'];
+                        if (args.success!==undefined) {
+                            args.success(data);
+                        }
+                        break;
+                    case "failure":
+                        delete data['call'];
+                        if (args.error!==undefined) {
+                            args.error(data);
+                        }
 
-                    break;
-            }
-        }, function(e){
-            console.error(e);
-            args.error(e);
-        }, "CordovaMqTTPlugin", "subscribe", [args.topic,args.qos||0]);
+                        break;
+                }
+            }, function(e){
+                console.error(e);
+                args.error(e);
+            }, "CordovaMqTTPlugin", "subscribe", [args.topic,args.qos||0]);
+        } else{
+            console.error("Please provide a topic string in topic argument");
+        }
 
     }
     exports.unsubscribe = function(args){
-        exec(function(data){
-            switch(data.call){
-                case "success":
-                    delete data['call'];
-                    if (args.success!==undefined) {
-                        args.success(data);
-                    }
-                    if (router!==null) {
-                        router.removeListener(args.topic);
-                    }
-                    break;
-                case "failure":
-                    delete data['call'];
-                    if (args.error!==undefined) {
-                        args.error(data);
-                    }
-                    break;
-            }
-        }, function(e){
-            console.error(e);
-            args.error(e);
-        }, "CordovaMqTTPlugin", "unsubscribe", [args.topic]);
+        if(args.topic.length > 0){
+            exec(function(data){
+                switch(data.call){
+                    case "success":
+                        delete data['call'];
+                        if (args.success!==undefined) {
+                            args.success(data);
+                        }
+                        if (router!==null) {
+                            router.removeListener(args.topic);
+                        }
+                        break;
+                    case "failure":
+                        delete data['call'];
+                        if (args.error!==undefined) {
+                            args.error(data);
+                        }
+                        break;
+                }
+            }, function(e){
+                console.error(e);
+                args.error(e);
+            }, "CordovaMqTTPlugin", "unsubscribe", [args.topic]);
+        } else{
+            console.error("Please provide a topic string in topic argument");
+        }
     }
     exports.disconnect = function(args){
         exec(function(data){
@@ -203,7 +216,7 @@ channel = require('cordova/channel'),
         if (router!==null) {
             return router;
         } else {
-            console.error("Router object seems to be destroyed")
+            console.error("Router object seems to be destroyed");
         }
 
     }
@@ -211,6 +224,6 @@ channel = require('cordova/channel'),
         if (router!==null) {
             router.on(topic,cb);
         } else {
-            console.error("Router object seems to be destroyed")
+            console.error("Router object seems to be destroyed");
         }
     }
