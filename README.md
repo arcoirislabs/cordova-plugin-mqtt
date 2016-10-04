@@ -26,7 +26,8 @@ $ cordova plugin add https://github.com/arcoirislabs/cordova-plugin-mqtt.git
 ```
 
 ### Changelog
-1. Fixed the disconnect issue.
+
+1. Adding temporary support to iOS platform until a stable native support arrives. The `publish` & `disconnect` callbacks won't work. Kindly add this Javascript Library in the `<head>` section [from this url](https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js)
 
 ### Documentation
 
