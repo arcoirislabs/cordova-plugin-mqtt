@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-mqtt" version="0.3.5" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-mqtt" version="0.3.6" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>CordovaMqTTPlugin</name>
     <description>The new MqTT plugin for Cordova</description>
     <!--
@@ -7,6 +7,9 @@
       -->
     <js-module name="MQTTEmitter" src="www/MQTTEmitter.js">
         <clobbers target="ME" />
+    </js-module>
+    <js-module name="MQTTJS" src="www/mqtt.min.js">
+        <clobbers target="mqtt" />
     </js-module>
     <js-module name="CordovaMqTTPlugin" src="www/cordova-plugin-mqtt.js">
         <clobbers target="cordova.plugins.CordovaMqTTPlugin" />
