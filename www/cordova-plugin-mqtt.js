@@ -105,12 +105,13 @@ channel = require('cordova/channel'),
                     console.error(e);
                 }, "CordovaMqTTPlugin", "connect", [url,args.clientId,args.keepAlive||60000,iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,args.willTopicConfig.retain||true,args.version||"3.1.1"]);
             } else {
+
                 if (args.url.split("tcp://").length > 1) {
                     client = new Paho.MQTT.Client(args.url.split("tcp://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
                 }
-                if (args.url.split("local://").length > 1) {
-                    client = new Paho.MQTT.Client(args.url.split("local://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
-                }
+                // if (args.url.split("local://").length > 1) {
+                //     client = new Paho.MQTT.Client(args.url.split("local://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
+                // }
                 client.onConnectionLost = function (cd) {
                     client = null;
                     if(args.error!==undefined){
@@ -150,8 +151,9 @@ channel = require('cordova/channel'),
                 connOpts.timeout = args.connectionTimeout||30;
                 connOpts.keepAliveInterval = args.keepAlive||60000;
                 connOpts.cleanSession = iscls;
-                connOpts.mqttVersion = args.version||"3.1.1";
-                if (args.willTopicConfig !== {}) {
+                //connOpts.mqttVersion = args.version||"3.1.1";
+                //console.log("will",args.willTopicConfig);
+                if (args.willTopicConfig.topic !== undefined) {
                     var willMsg = new Paho.MQTT.Message(args.payloadString);
                     willMsg.destinationName = args.willTopicConfig.topic;
                     willMsg.qos = args.willTopicConfig.qos||0;
