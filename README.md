@@ -106,13 +106,13 @@ cordova.plugins.CordovaMqTTPlugin.publish({
    topic:"sampletopic",
    payload:"hello from the plugin",
    qos:0,
-   retain:false
-  success:function(s){
+   retain:false,
+   success:function(s){
 
-  },
-  error:function(e){
+   },
+   error:function(e){
 
-  }
+   }
 })
 ```
 In order to debug the publish call you can either go for callbacks in the function or events. Once published the function will call the "published" event & the success callback else the function will call both "not published" event & error callback.
