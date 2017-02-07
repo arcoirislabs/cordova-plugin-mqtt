@@ -54,9 +54,9 @@ Default listeners you can program anywhere for following events
  - not published
 
 For example you can configure the event in this way
-Deprecated
 
  ```javascript
+ //Deprecated
  document.addEventListener("connected",function(e){
   console.log(e.type)
  },false)
