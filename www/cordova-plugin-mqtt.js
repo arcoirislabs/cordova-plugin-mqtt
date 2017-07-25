@@ -157,7 +157,7 @@ channel = require('cordova/channel'),
                     var willMsg = new Paho.MQTT.Message(args.payloadString);
                     willMsg.destinationName = args.willTopicConfig.topic;
                     willMsg.qos = args.willTopicConfig.qos||0;
-                    willMsg.retained = (args.willTopicConfig.retain === undefined) true : args.willTopicConfig.retain;
+                    willMsg.retained = (args.willTopicConfig.retain === undefined) ? true : args.willTopicConfig.retain;
                     connOpts.willMessage = willMsg;
                 }
                 client.connect(connOpts);
