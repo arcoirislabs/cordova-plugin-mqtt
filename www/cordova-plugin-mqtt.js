@@ -103,7 +103,7 @@ channel = require('cordova/channel'),
                     }
                 }, function(e){
                     console.error(e);
-                }, "CordovaMqTTPlugin", "connect", [url,(args.clientId,args.keepAlive === undefined ? 60000 : args.clientId,args.keepAlive),iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,(args.willTopicConfig.retain === undefined ? true : args.willTopicConfig.retain),args.version||"3.1.1"]);
+                }, "CordovaMqTTPlugin", "connect", [url,args.clientId,(args.keepAlive === undefined ? 60000 : args.keepAlive),iscls,args.connectionTimeout||30,args.username, args.password,args.willTopicConfig.topic,args.willTopicConfig.payload,args.willTopicConfig.qos||0,(args.willTopicConfig.retain === undefined ? true : args.willTopicConfig.retain),args.version||"3.1.1"]);
             } else {
 
                 if (args.url.split("tcp://").length > 1) {
