@@ -107,7 +107,7 @@ channel = require('cordova/channel'),
             } else {
 
                 if (args.url.split("tcp://").length > 1) {
-                    client = new Paho.MQTT.Client(args.url.split("tcp://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
+                    client = new Paho.MQTT.Client(args.url.split("tcp://")[1], Number(args.wsPort ? args.wsPort : args.port), args.urlPath||"/ws", args.clientId);
                 }
                 // if (args.url.split("local://").length > 1) {
                 //     client = new Paho.MQTT.Client(args.url.split("local://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
