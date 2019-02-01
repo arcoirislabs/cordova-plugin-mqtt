@@ -107,7 +107,7 @@ channel = require('cordova/channel'),
             } else {
 
                 if (args.url.split("tcp://").length > 1) {
-                    client = new Paho.MQTT.Client(args.url.split("tcp://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
+                    client = new Paho.MQTT.Client(args.url.split("tcp://")[1], Number(args.wsPort ? args.wsPort : args.port), args.urlPath||"/ws", args.clientId);
                 }
                 // if (args.url.split("local://").length > 1) {
                 //     client = new Paho.MQTT.Client(args.url.split("local://")[1], Number(args.wsPort), args.urlPath||"/ws", args.clientId);
@@ -154,7 +154,7 @@ channel = require('cordova/channel'),
                 //connOpts.mqttVersion = args.version||"3.1.1";
                 //console.log("will",args.willTopicConfig);
                 if (args.willTopicConfig.topic !== undefined) {
-                    var willMsg = new Paho.MQTT.Message(args.payloadString);
+                    var willMsg = new Paho.MQTT.Message(args.willTopicConfig.payload);
                     willMsg.destinationName = args.willTopicConfig.topic;
                     willMsg.qos = args.willTopicConfig.qos||0;
                     willMsg.retained = (args.willTopicConfig.retain === undefined) ? true : args.willTopicConfig.retain;
