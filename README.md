@@ -81,6 +81,7 @@ cordova.plugins.CordovaMqTTPlugin.connect({
     username:"uname",
     password:'pass',
     keepAlive:60,
+    isBinaryPayload: false, //setting this 'true' will make plugin treat all data as binary and emit ArrayBuffer instead of string on events
     success:function(s){
         console.log("connect success");
     },

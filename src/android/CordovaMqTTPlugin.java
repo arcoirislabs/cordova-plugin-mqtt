@@ -1,5 +1,6 @@
 package com.arcoirislabs.plugin.mqtt;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
@@ -39,7 +40,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                 @Override
                 public void run() {
                     try {
-                        connect(args.getString(0), args.getString(1), args.getInt(2), args.getBoolean(3), args.getInt(4), args.getString(5), args.getString(6), args.getString(7), args.getString(8), args.getInt(9), args.getBoolean(10), args.getString(11));
+                        connect(args.getString(0), args.getString(1), args.getInt(2), args.getBoolean(3), args.getInt(4), args.getString(5), args.getString(6), args.getString(7), args.getString(8), args.getInt(9), args.getBoolean(10), args.getString(11), args.getBoolean(12), args.getBoolean(13));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -109,7 +110,7 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
         return false;
     }
 
-    private void connect(String url,String cid,int ka,boolean cleanSess,int connTimeOut,String uname, String pass,String willTopic,String willPayload,int willQos,boolean willRetain,String version) {
+    private void connect(String url,String cid,int ka,boolean cleanSess,int connTimeOut,String uname, String pass,String willTopic,String willPayload,int willQos,boolean willRetain,String version,boolean isBinaryPayload,boolean isBinaryWillPayload) {
         MemoryPersistence persistence = new MemoryPersistence();
         final MqttConnectOptions connOpts = new MqttConnectOptions();
         connected = false;
@@ -146,7 +147,11 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                     try {
                         dis.put("type", "messageArrived");
                         dis.put("topic", topic);
-                        dis.put("payload", message);
+                        if (isBinaryPayload) {
+                            dis.put("payload", Base64.encodeToString(message.getPayload(), Base64.DEFAULT));
+                        } else {
+                            dis.put("payload", message.toString());
+                        }
                         dis.put("call", "onPublish");
                         dis.put("connectionStatus", client.isConnected());
                         dis.put("qos",message.getQos());
@@ -168,8 +173,13 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
                 }
             });
             if (willTopic!=null&&willPayload!=null&&willQos>-1){
-
-                connOpts.setWill(willTopic,willPayload.getBytes(),willQos,willRetain);
+                byte[] willPayloadBytes;
+                if (isBinaryWillPayload) {
+                    willPayloadBytes = Base64.decode(willPayload, Base64.DEFAULT);
+                } else {
+                    willPayloadBytes = willPayload.getBytes();
+                }
+                connOpts.setWill(willTopic,willPayloadBytes,willQos,willRetain);
             }
 
             if(uname.toString()=="null"&&pass.toString()=="null"){
@@ -221,7 +231,12 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
     }
     private void publish(JSONArray args) throws JSONException {
         final MqttMessage payload = new MqttMessage();
-        payload.setPayload(args.getString(1).getBytes());
+        boolean binaryPayload = args.getBoolean(4);
+        if (binaryPayload) {
+            payload.setPayload(Base64.decode(args.getString(1), Base64.DEFAULT));
+        } else {
+            payload.setPayload(args.getString(1).getBytes());
+        }
         payload.setQos(args.getInt(2));
         payload.setRetained(args.getBoolean(3));
         Log.i("mqttalabs", "Topic is " + args.getString(0) + ". Payload is " + args.getString(1));
@@ -417,4 +432,3 @@ public class CordovaMqTTPlugin extends CordovaPlugin {
     }
 
 }
- 
