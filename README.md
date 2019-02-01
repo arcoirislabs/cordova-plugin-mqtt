@@ -3,6 +3,18 @@
 [![npm version](https://badge.fury.io/js/cordova-plugin-mqtt.svg)](https://badge.fury.io/js/cordova-plugin-mqtt)
 [![Join the chat at https://gitter.im/arcoirislabs/cordova-plugin-mqtt](https://badges.gitter.im/arcoirislabs/cordova-plugin-mqtt.svg)](https://gitter.im/arcoirislabs/cordova-plugin-mqtt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+Important Notice
+
+This project is not abandoned or inactive. On 20th Feb 2019, major updates will be pushed. 
+
+Updates:
+
+1. Native Support for iOS & Windows (UWP only)
+2. New API
+3. SSL/TLS support on Android, iOS & Windows
+4. Better config validation.
+5. Resolution of bugs
+
 
 cordova-plugin-mqtt is plugin for building MQTT client for multiple platforms in Apache Cordova. Currently Android platform is present and next support is planned for iOS & Windows Phone.
 
